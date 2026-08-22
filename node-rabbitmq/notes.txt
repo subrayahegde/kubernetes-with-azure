@@ -1,0 +1,13 @@
+vaz acr login --name hegdes
+
+docker build -t hegdes.azurecr.io/app-web:latest ./web
+docker build -t hegdes.azurecr.io/app-worker:latest ./worker
+
+docker push hegdes.azurecr.io/app-web:latest
+docker push hegdes.azurecr.io/app-worker:latest
+
+kubectl apply -f rabbitmq.yaml
+kubectl apply -f app.yaml
+
+kubectl rollout restart deployment/web
+

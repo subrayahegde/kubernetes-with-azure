@@ -1,0 +1,28 @@
+
+az login
+
+az aks get-credentials --resource-group test --name myAKSCluster
+
+az acr create --resource-group test --name hegdes --sku Basic
+az acr login --name hegdes
+
+az aks create \
+  --resource-group test \
+  --name myAKSCluster \
+  --node-count 2 \
+  --node-vm-size Standard_B2s_v2 \
+  --generate-ssh-keys \
+  --attach-acr hegdes
+
+az aks get-credentials --resource-group test --name myAKSCluster --overwrite-existing
+az aks get-credentials --resource-group test --name myAKSCluster --file ./azurek8s.yaml
+
+kubectl get nodes
+kubectl get svc
+kubectl get pods
+
+az aks update \
+  --resource-group test \
+  --name myAKSCluster \
+  --attach-acr hegdes
+
